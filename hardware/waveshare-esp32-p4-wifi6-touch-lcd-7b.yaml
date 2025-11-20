@@ -6,7 +6,12 @@
 esphome:
   name: waveshare-esp32-p4-touch-lcd-7b
   friendly_name: waveshare-esp32-p4-wifi6-touch-lcd-7b
+  min_version: 2025.11.0
+  project:
+    name: "Waveshare.ESP32-P4-WIFI6-Touch-LCD-7B"
+    version: "1.0.0"
 
+# We won't need this once this board is added to ESPhome
 external_components:
   - source: github://pr#11886
     components: [mipi_dsi]
@@ -116,7 +121,7 @@ lvgl:
   byte_order: little_endian
 
 # -------------------------------------------
-# Audio
+# Audio devices
 # -------------------------------------------
 i2s_audio:
   - id: audio_bus
