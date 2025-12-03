@@ -32,10 +32,10 @@ widgets:
         pad_top: -15
         pad_bottom: -15 
         radius: 5        
-        bg_color: white
+        bg_color: $label_on_color
       indicator:
         radius: 0
-        bg_color: gray
+        bg_color: $label_off_color
       on_release:
         - homeassistant.action:
             action: light.turn_on
