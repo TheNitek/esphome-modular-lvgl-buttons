@@ -123,7 +123,9 @@ sensor:
     platform: homeassistant
     entity_id: ${entity_id}
     attribute: brightness
-
+    filters:
+      - filter_out: nan
+      
     on_value:
       - lvgl.slider.update:
           id: slider_${uid}
