@@ -11,22 +11,18 @@ substitutions:
   label_on_color: "white"
   label_off_color: "gray"
   button_text_color: "white"
-  touchscreen_idle_timeout: "30s"
-  touchscreen_daytime_brightness: "100%"
-  touchscreen_nighttime_brightness: "50%"
-  # Boot screen configuration
-  boot_screen_delay: 60s
 
   # LCD backlight modes - Code in backlight.yaml
-  # Day mode is set to Sunrise
-  # Evening mode is set to sunset
-  # Set Night mode  at Mightnight here
+  # Set Day mode - starts at Sunrise - screen at 100%
+  touchscreen_daytime_brightness: "100%"
+  # Set Evening mode -  starts at Sunset - screen at 50% (may need to be brighter for some screens)
+  touchscreen_nighttime_brightness: "75%"
+  # Set Night mode - starts at Mightnight (or some other time you set here) - screen backlight is off
   screen_night_hour: '0'
   screen_night_minute: '0'
+  # Set touchscreen idle timeout - In night mode backlight goes off after this amount of time
+  touchscreen_idle_timeout: "5s"
 
-  # Screen Size
-  screen_height: 480
-  screen_width: 800
 
 esphome:
   name: "guition-esp32-jc8048w550"
@@ -97,7 +93,7 @@ packages:
     vars:
       uid: button_2
       row: 0
-      column: 6
+      column: 5
       text: 00:00
       click_page: info_screen
       
@@ -136,7 +132,7 @@ lvgl:
   buffer_size: 100%
   pages:
     - id: main_page
-      layout: 4x7
+      layout: 4x6
       styles: page_style
       <<: !include esphome-modular-lvgl-buttons/widgets/swipe_navigation.yaml
       widgets:
@@ -146,7 +142,7 @@ lvgl:
               grid_cell_x_align: stretch
               grid_cell_y_align: stretch
               grid_cell_row_pos: 3
-              grid_cell_column_pos: 6
+              grid_cell_column_pos: 5
               grid_cell_row_span: 1
               grid_cell_column_span: 1
               outline_width: 1   # debug code - This is for visualizing boundries remove for production
@@ -156,7 +152,7 @@ lvgl:
                     text_font: $text_font
                     align: center
                     text_color: white
-                    text: "Cell 3,7"
+                    text: "Cell 3,5"
   
 # If you want to use other icons add them to the list here
 font:

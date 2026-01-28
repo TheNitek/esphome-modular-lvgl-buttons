@@ -25,6 +25,8 @@ time:
             - text_sensor.template.publish:
                 id: device_last_restart
                 state: !lambda 'return id(system_time).now().strftime("%a %d %b %Y - %I:%M:%S %p");'
+      # Set brightness mode on boot based on current time vs sunrise/sunset
+      - script.execute: set_brightness_mode_on_boot
     on_time:
       - seconds: 0
         minutes: $screen_night_minute
@@ -65,8 +67,9 @@ lvgl:
             - lvgl.pause:
                 show_snow: true
 
-# Wake on screen touch
+# Wake on screen touch - extends the touchscreen defined in hardware file
 touchscreen:
+  - id: !extend my_touchscreen
     on_touch:
       then:
         - logger.log: "LVGL is active"
@@ -130,3 +133,37 @@ select:
               - light.turn_on:
                   id: display_backlight
                   brightness: ${touchscreen_nighttime_brightness}
+
+script:
+  - id: set_brightness_mode_on_boot
+    then:
+      # Check if it's night time first (scheduled night hours)
+      - if:
+          condition:
+            - time.has_time:
+                id: system_time
+            - or:
+                - lambda: |-
+                    auto now = id(system_time).now();
+                    int current_minutes = now.hour * 60 + now.minute;
+                    int night_minutes = ${screen_night_hour} * 60 + ${screen_night_minute};
+                    // Night if after night_hour OR before 5am (catches late night)
+                    return current_minutes >= night_minutes || current_minutes < 5 * 60;
+          then:
+            - select.set:
+                id: brightness_mode
+                option: "Night"
+          else:
+            # Not night time, check sun position
+            - if:
+                condition:
+                  - sun.is_above_horizon:
+                      elevation: -3.5°
+                then:
+                  - select.set:
+                      id: brightness_mode
+                      option: "Day"
+                else:
+                  - select.set:
+                      id: brightness_mode
+                      option: "Evening"
