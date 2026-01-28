@@ -20,7 +20,7 @@ substitutions:
   # LCD backlight modes - Code in backlight.yaml
   # Day mode is set to Sunrise
   # Evening mode is set to sunset
-  # Set Night mode  at Mightnight here
+  # Set Night mode  at Midnight here
   screen_night_hour: '0'
   screen_night_minute: '0'
 
